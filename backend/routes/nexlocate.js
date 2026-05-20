@@ -82,10 +82,26 @@ router.post('/items', async (req, res) => {
 
 // ── DELETE /api/nexlocate/items/:id  – remove own report
 router.delete('/items/:id', async (req, res) => {
+  const { userId } = req.body;
   try {
+    const item = await LostItem.findById(req.params.id);
+
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+
+    if (item.userId !== userId) {
+      return res.status(403).json({ message: 'Forbidden — you can only delete your own reports' });
+    }
+
     await LostItem.findByIdAndDelete(req.params.id);
     res.json({ message: 'Item removed' });
   } catch {
+    // Mock fallback — check ownership against mock data
+    const mockItem = MOCK_ITEMS.find(i => i._id === req.params.id);
+    if (mockItem && mockItem.userId !== userId) {
+      return res.status(403).json({ message: 'Forbidden — you can only delete your own reports' });
+    }
     res.json({ message: 'Item removed (mock)' });
   }
 });
