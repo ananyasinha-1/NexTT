@@ -64,4 +64,4 @@ When creating an issue:
 * Provide detailed steps to reproduce bugs.
 * Include screenshots when applicable.
 
-Thank you for contributing to NexTT:Smart Campus!
+Thank you for contributing to NexTT: Smart Campus!
